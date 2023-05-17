@@ -50,7 +50,11 @@ class DPlayBaseIE(InfoExtractor):
         raise ExtractorError(info['errors'][0]['detail'], expected=True)
 
     def _update_disco_api_headers(self, headers, disco_base, display_id, realm):
-        headers['Authorization'] = self._get_auth(disco_base, display_id, realm, False)
+        headers.update({
+            'x-disco-params': 'realm=%s' % realm,
+            'x-disco-client': f'WEB:UNKNOWN:{self._PRODUCT}:25.2.6',
+            'Authorization': self._get_auth(disco_base, display_id, realm),
+        })
 
     def _download_video_playback_info(self, disco_base, video_id, headers):
         streaming = self._download_json(
@@ -346,7 +350,11 @@ class HGTVDeIE(DPlayBaseIE):
 
 class DiscoveryPlusBaseIE(DPlayBaseIE):
     def _update_disco_api_headers(self, headers, disco_base, display_id, realm):
-        headers['x-disco-client'] = f'WEB:UNKNOWN:{self._PRODUCT}:25.2.6'
+        headers.update({
+            'x-disco-params': 'realm=%s' % realm,
+            'x-disco-client': f'WEB:UNKNOWN:{self._PRODUCT}:25.2.6',
+            'Authorization': self._get_auth(disco_base, display_id, realm),
+        })
 
     def _download_video_playback_info(self, disco_base, video_id, headers):
         return self._download_json(
@@ -387,7 +395,7 @@ class GoDiscoveryIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'dsc'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.go.discovery.com',
+        'disco_host': 'eu1-prod-direct.go.discovery.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -414,7 +422,7 @@ class TravelChannelIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'trav'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.travelchannel.com',
+        'disco_host': 'eu1-prod-direct.watch.travelchannel.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -441,7 +449,7 @@ class CookingChannelIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'cook'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.cookingchanneltv.com',
+        'disco_host': 'eu1-prod-direct.watch.cookingchanneltv.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -468,7 +476,7 @@ class HGTVUsaIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'hgtv'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.hgtv.com',
+        'disco_host': 'eu1-prod-direct.watch.hgtv.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -495,7 +503,7 @@ class FoodNetworkIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'food'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.foodnetwork.com',
+        'disco_host': 'eu1-prod-direct.watch.foodnetwork.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -522,7 +530,7 @@ class DestinationAmericaIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'dam'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.destinationamerica.com',
+        'disco_host': 'eu1-prod-direct.destinationamerica.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -549,7 +557,7 @@ class InvestigationDiscoveryIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'ids'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.investigationdiscovery.com',
+        'disco_host': 'eu1-prod-direct.investigationdiscovery.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -576,7 +584,7 @@ class AmHistoryChannelIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'ahc'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.ahctv.com',
+        'disco_host': 'eu1-prod-direct.ahctv.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -603,7 +611,7 @@ class ScienceChannelIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'sci'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.sciencechannel.com',
+        'disco_host': 'eu1-prod-direct.sciencechannel.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -630,7 +638,7 @@ class DIYNetworkIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'diy'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.diynetwork.com',
+        'disco_host': 'eu1-prod-direct.watch.diynetwork.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -657,7 +665,7 @@ class DiscoveryLifeIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'dlf'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.discoverylife.com',
+        'disco_host': 'eu1-prod-direct.discoverylife.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -684,7 +692,7 @@ class AnimalPlanetIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'apl'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.animalplanet.com',
+        'disco_host': 'eu1-prod-direct.animalplanet.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -711,7 +719,7 @@ class TLCIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'tlc'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.tlc.com',
+        'disco_host': 'eu1-prod-direct.tlc.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -738,7 +746,7 @@ class MotorTrendIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'vel'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.watch.motortrend.com',
+        'disco_host': 'eu1-prod-direct.watch.motortrend.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -770,7 +778,7 @@ class MotorTrendOnDemandIE(DiscoveryPlusBaseIE):
 
     _PRODUCT = 'MTOD'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.motortrendondemand.com',
+        'disco_host': 'eu1-prod-direct.motortrendondemand.com',
         'realm': 'motortrend',
         'country': 'us',
     }
@@ -807,9 +815,9 @@ class DiscoveryPlusIE(DiscoveryPlusBaseIE):
         'only_matching': True,
     }]
 
-    _PRODUCT = 'dplus_us'
+    _PRODUCT = 'dplus_uk'
     _DISCO_API_PARAMS = {
-        'disco_host': 'us1-prod-direct.discoveryplus.com',
+        'disco_host': 'eu1-prod-direct.discoveryplus.com',
         'realm': 'go',
         'country': 'us',
     }
@@ -950,7 +958,7 @@ class DiscoveryPlusItalyIE(DiscoveryPlusBaseIE):
         'only_matching': True,
     }]
 
-    _PRODUCT = 'dplus_us'
+    _PRODUCT = 'dplus_uk'
     _DISCO_API_PARAMS = {
         'disco_host': 'eu1-prod-direct.discoveryplus.com',
         'realm': 'dplay',
